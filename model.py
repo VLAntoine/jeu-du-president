@@ -27,14 +27,6 @@ class Card:
     def __gt__(self, other) -> bool:
         return self.__value > other.value
 
-        # Compare suits
-
-    def __eq__(self, other) -> bool:
-        return self.__value == other.value
-
-    def __ne__(self, other) -> bool:
-        return self.__value != other.value
-
 
 class Deck:
     def __init__(self):
