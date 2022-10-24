@@ -1,45 +1,70 @@
-from json import detect_encoding
+from ast import Eq, Return
 import random
-from select import select
 import string
 
-suits = ['♡', '♤', '♢', '♧']
-values = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2']
+SUITS = ['♡', '♤', '♢', '♧']
+VALUES = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2']
 
 
 class Card:
-    def __init__(self, suit, value):
+    def __init__(self, value: string, suit: string):
         self.__suit: string = suit
-        self.__value = value
+        self.__value: string = value
+
+    @property
+    def value(self):
+        return self.__value
 
     # compare values
     def __eq__(self, other) -> bool:
         return self.__value == other.value
+
     def __lt__(self, other) -> bool:
         return self.__value < other.value
-    def __ne__(self, other) -> bool:
-        return self.__value != other.value
-    def __gt__(self, other) -> bool:
-        return self.__value > other.value 
 
-    # Compare suits
-    def __eq__(self, other) -> bool:
-        return self.__value == other.value
     def __ne__(self, other) -> bool:
         return self.__value != other.value
+
+    def __gt__(self, other) -> bool:
+        return self.__value > other.value
+
 
 class Deck:
     def __init__(self):
         self.__cards: list[Card] = []
-        for suit in suits:
-            for value in values:
+        for value in VALUES:
+            for suit in SUITS:
                 self.__cards.append(Card(suit, value))
 
+    def __eq__(self, other) -> bool:
+        for index, card in enumerate(self.__cards):
+            card == other.cards[index] 
+
+    @property
+    def cards(self):
+        return self.card
+
+    def shuffle(self):
         random.shuffle(self.__cards)
 
-class PresidentGame(Player) :
-    def __init__(self) -> None:
-        return 0
+class Player:
+    def __init__(self, name: string, cards: list[Card]):
+        self._name: string = name
+        self._hand: list[Card] = cards
 
-    def distribute_cards():
-        
+    def add_to_hand(self, card: Card):
+        self._hand.append(card)
+
+    def remove_from_hand(self, card: Card):
+        self._hand.remove(card)
+
+    def play(self, card: Card):
+        pass
+
+
+class AIPlayer(Player):
+    def __init__(self, name: string, cards: list[Card]):
+        super().__init__(name, cards)
+
+    def play(self, card: Card):
+        self._hand.remove(card)
