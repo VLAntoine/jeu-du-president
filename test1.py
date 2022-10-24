@@ -1,5 +1,5 @@
 import unittest
-import models
+import model
 
 class TestCardsExercice1(unittest.TestCase):
     def test_card_constructor(self):
