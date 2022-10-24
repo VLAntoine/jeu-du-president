@@ -21,8 +21,8 @@ class Card:
 class Deck:
     def __init__(self):
         self.__cards: list[Card] = []
-        for suit in SUITS:
-            for value in VALUES:
+        for value in VALUES:
+            for suit in SUITS:
                 self.__cards.append(Card(suit, value))
 
     def shuffle(self):
