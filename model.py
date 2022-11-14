@@ -141,14 +141,14 @@ class PresidentGame:
         self.__current_trick.add_cards(cards)
 
     def end_turn(self):
-        # TODO
+        # TODO 2 || nb tour passé atein (>nb joueurs) resets const
         pass
 
     def end_set(self):
-        # TODO
+        # TODO Fin du set plus qu'un joueur qui a des carte attributiondes roles + increment nb_de_set
         pass
 
     def end_game(self):
-        # TODO
+        # TODO Nb de sets max atein Affichage des scores
         pass
 
