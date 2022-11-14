@@ -11,6 +11,10 @@ class Card:
     @property
     def value(self):
         return self.__value
+    
+    @property
+    def suit(self):
+        return self.__suit
 
     # compare values
     def __eq__(self, other) -> bool:
@@ -145,6 +149,7 @@ class PresidentGame:
 
     def end_turn(self):
         # Fin d'un tours si un 2 est posé ou que personne n'as joué
+        punchline = ['a plié le game', 'vous emmerde tous', 'prouve ça supériorité', 'est le plus fort']
 
         if self.__turns_without_plays >= list[Player]:
             print("Fin du tour, personne n'as joué...")
@@ -155,7 +160,7 @@ class PresidentGame:
             self.__numbuer_of_sets - 1
 
         if list[Card] == "2":
-            print(self.players, " [inserer punchline] avec un 2")
+            print(self.players, " ", random.choice(punchline), " avec un 2")
 
             self.__current_trick: Trick = Trick()
             self.__current_player_index: int = 0

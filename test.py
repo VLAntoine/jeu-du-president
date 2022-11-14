@@ -62,5 +62,6 @@ class TestCardsExercice2(unittest.TestCase):
         self.assertTrue(len(player_1.hand) > 0)
         self.assertTrue(len(player_1.hand) >= len(player_2.hand))
 
+
 if __name__ == '__main__':
     unittest.main()
