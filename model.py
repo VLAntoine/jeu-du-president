@@ -192,3 +192,4 @@ class PresidentGame:
         if self.__numbuer_of_sets == 0:
             print("Partie terminé : plus assé de tours")
         pass
+
