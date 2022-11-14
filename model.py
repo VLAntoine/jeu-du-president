@@ -1,4 +1,6 @@
+from json import detect_encoding
 import random
+from select import select
 import string
 from constant import VALUES, SUITS, NAMES
 
@@ -11,7 +13,7 @@ class Card:
     @property
     def value(self):
         return self.__value
-    
+
     @property
     def suit(self):
         return self.__suit
@@ -83,6 +85,10 @@ class Trick:
 
     def add_cards(self, cards: list[Card]):
         self.__cards.extend(cards)
+
+    @property
+    def cards(self):
+        return self.__cards
 
     @property
     def number_of_cards(self):

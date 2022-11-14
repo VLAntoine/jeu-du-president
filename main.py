@@ -1,36 +1,19 @@
+import view
 import model
 
+number_of_players = input("Combien de joueurs pour cette partie ? (minimum 4) ")
+nb_players = int(number_of_players) - 1
+number_of_sets = input("En combien de sets se jouera la partie ? ")
+players :list = []
 
-# deck1 = model.Deck()
-# deck2 = model.Deck()
+print("nb de joueur : ", nb_players)
 
-player1 = model.Player()
-player2 = model.Player()
-player3 = model.Player()
-player4 = model.Player()
+while nb_players >= 1:
+    player = model.Player()
+    players.append(player)
+    nb_players = nb_players - 1
+    print(nb_players)
 
-game = model.PresidentGame( players = [player1 ,player2 ,player3 ,player4] )
+print("players : ", len(players))
 
-
-print("player 1 - ", player1.name, " have this hand : ")
-for card in player1.hand:
-    print(card.value, card.suit)
-
-print("player 2 - ", player2.name, " have this hand : ")
-for card in player2.hand:
-    print(card.value, card.suit)
-
-print("player 3 - ", player3.name, " have this hand : ")
-for card in player3.hand:
-    print(card.value, card.suit)
-
-print("player 4 - ", player4.name, " have this hand : ")
-for card in player4.hand:
-    print(card.value, card.suit)
-
-# print("DECK1 : ")
-# print(deck1)
-# print("\n")
-# print("DECK2 : ")
-# print(deck2)
-# print("\n")
+console_view = view.CommandLineView(players, number_of_sets)
