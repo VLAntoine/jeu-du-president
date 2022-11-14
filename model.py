@@ -1,4 +1,6 @@
+from json import detect_encoding
 import random
+from select import select
 import string
 from constant import VALUES, SUITS, NAMES
 
@@ -11,6 +13,10 @@ class Card:
     @property
     def value(self):
         return self.__value
+
+    @property
+    def suit(self):
+        return self.__suit
 
     # compare values
     def __eq__(self, other) -> bool:
@@ -102,13 +108,14 @@ class AIPlayer(Player):
 
 
 class PresidentGame:
-    def __init__(self, players: list[Player] = None,  number_of_sets: int = 1):
-        self.__players = [Player(), Player(), Player()] if players is None else players
+    def __init__(self, players: list[Player] = None, number_of_sets: int = 1):
+        self.__players = [Player(), Player(), Player()
+                          ] if players is None else players
         self.distribute()
         self.__current_trick: Trick = Trick()
         self.__current_player_index: int = 0
         self.__turns_without_plays: int = 0
-        self.__number_of_sets: int = number_of_sets
+        self.__numbuer_of_sets: int = number_of_sets
 
     @property
     def players(self):
@@ -126,10 +133,6 @@ class PresidentGame:
     def turns_without_plays(self):
         return self.__turns_without_plays
 
-    @property
-    def current_trick(self):
-        return self.__current_trick
-
     def distribute(self):
         deck = Deck()
         deck.shuffle()
@@ -140,7 +143,8 @@ class PresidentGame:
             player.add_to_hand(card)
 
     def next_player(self):
-        self.__current_player_index = (self.__current_player_index + 1) % len(self.__players)
+        self.__current_player_index = (
+            self.__current_player_index + 1) % len(self.__players)
 
     def skip_turn(self):
         self.__turns_without_plays += 1
@@ -150,14 +154,41 @@ class PresidentGame:
         self.__current_trick.add_cards(cards)
 
     def end_turn(self):
-        # TODO
+        # Fin d'un tours si un 2 est posé ou que personne n'as joué
+        punchline = ['a plié le game', 'vous emmerde tous', 'prouve ça supériorité', 'est le plus fort']
+
+        if self.__turns_without_plays >= list[Player]:
+            print("Fin du tour, personne n'as joué...")
+
+            self.__current_trick: Trick = Trick()
+            self.__current_player_index: int = 0
+            self.__turns_without_plays: int = 0
+            self.__numbuer_of_sets - 1
+
+        if list[Card] == "2":
+            print(self.players, " ", random.choice(punchline), " avec un 2")
+
+            self.__current_trick: Trick = Trick()
+            self.__current_player_index: int = 0
+            self.__turns_without_plays: int = 0
+            self.__numbuer_of_sets - 1
         pass
 
     def end_set(self):
-        # TODO
+        # Fin du set si un seul joueur a des carte ou personne n'a jouer
+        # attributiondes roles + increment nb_de_set
+        user_without_cards = 0
+        for player in self.__players:
+            if player.has_card == 0:
+                user_without_cards += 1
+                print(player.name, " n'a plus de cartes")
+        if user_without_cards == player - 1:
+            print("fin du set : personne n'a joué")
+
         pass
 
     def end_game(self):
-        # TODO
+        # Nb de sets max atein Affichage des scores
+        if self.__numbuer_of_sets == 0:
+            print("Partie terminé : plus assé de tours")
         pass
-
