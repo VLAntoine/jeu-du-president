@@ -81,6 +81,10 @@ class Trick:
         self.__cards.extend(cards)
 
     @property
+    def cards(self):
+        return self.__cards
+
+    @property
     def number_of_cards(self):
         return self.__number_of_cards
 
@@ -98,12 +102,13 @@ class AIPlayer(Player):
 
 
 class PresidentGame:
-    def __init__(self, players: list[Player] = None):
+    def __init__(self, players: list[Player] = None,  number_of_sets: int = 1):
         self.__players = [Player(), Player(), Player()] if players is None else players
         self.distribute()
         self.__current_trick: Trick = Trick()
         self.__current_player_index: int = 0
         self.__turns_without_plays: int = 0
+        self.__number_of_sets: int = number_of_sets
 
     @property
     def players(self):
@@ -120,6 +125,10 @@ class PresidentGame:
     @property
     def turns_without_plays(self):
         return self.__turns_without_plays
+
+    @property
+    def current_trick(self):
+        return self.__current_trick
 
     def distribute(self):
         deck = Deck()

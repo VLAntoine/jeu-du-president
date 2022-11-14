@@ -1,11 +1,5 @@
-import model
+import view
 
-deck1 = model.Deck()
-deck2 = model.Deck()
+number_of_players = input("Combien de joueurs pour cette partie ?")
 
-print("DECK1 : ")
-print(deck1)
-print("\n")
-print("DECK2 : ")
-print(deck2)
-print("\n")
+console_view = view.CommandLineView()
