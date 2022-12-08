@@ -33,17 +33,8 @@ class Card:
     def __str__(self):
         return self.__value + self.__suit
 
-
-class Cards:
-    def __init__(self):
-        self.__cards = []
-
-    @property
-    def cards(self):
-        return self.__cards
-
-    def append(self, card: Card):
-        self.__cards.append(card)
+class Cards(list[Card]):
+    def __contains__(self, card):
 
 
 class Deck:
@@ -132,21 +123,27 @@ class Player:
     def clear_hand(self):
         self._hand = []
 
+    def sort_hand(self):
+        self.hand.sort()
+
     def has_card(self, card: Card):
-        return card in self._hand
+        return is_card_in_cards(card, self._hand)
 
     def play(self, cards: list[Card]):
         for card in cards:
             self.remove_from_hand(card)
 
     def get_cards_allowed(self, trick: Trick):
-        trick.cards.sort()
-        cards_as_dict = get_cards_as_dict(self._hand)
         cards_allowed = []
-        for value, cards in cards_as_dict.items():
-            if cards[0] > trick.cards[-1] and \
-                    len(cards) >= trick.number_of_cards:
-                cards_allowed.extend(cards)
+        if len(trick.cards) == 0:
+            cards_allowed = self._hand
+        else:
+            trick.cards.sort()
+            cards_as_dict = get_cards_as_dict(self._hand)
+            for value, cards in cards_as_dict.items():
+                if cards[0] > trick.cards[-1] and \
+                        len(cards) >= trick.number_of_cards:
+                    cards_allowed.extend(cards)
         return cards_allowed
 
     def __str__(self):
@@ -165,9 +162,15 @@ class AIPlayer(Player):
         cards_allowed_dict = get_cards_as_dict(cards_allowed)
         values = list(cards_allowed_dict.keys())
         random_value = random.choice(values)
-        cards_combination_allowed = list(combinations(cards_allowed_dict[random_value], trick.number_of_cards))
-        # ajoute une liste vide, si elle est retenue, l'ia passe son tour
-        cards_combination_allowed.append([])
+        cards_allowed_value = cards_allowed_dict[random_value]
+        if len(trick.cards) != 0:
+            cards_combination_allowed = list(combinations(cards_allowed_value, trick.number_of_cards))
+            # ajoute une liste vide, si elle est retenue, l'ia passe son tour
+            cards_combination_allowed.append([])
+        else:
+            nb_cards_with_value = len(cards_allowed_value)
+            cards_combination_allowed = [list(comb) for nb_cards in range(1, nb_cards_with_value + 1)
+                                         for comb in combinations(cards_allowed_value, nb_cards)]
         return random.choice(cards_combination_allowed)
 
 
@@ -247,8 +250,9 @@ class PresidentGame:
 
     def is_turn_ended(self):
         self.__current_trick.cards.sort()
-        return (self.__turns_without_plays >= len(self.__players)
-                or self.__current_trick.cards[-1].value == 2)
+        return not len(self.__current_trick.cards) == 0 \
+               and (self.__turns_without_plays >= len(self.__players)
+                    or self.__current_trick.cards[-1].value == 2)
 
     def end_turn(self):
         self.__current_player_index = self.__current_trick.last_player_index
@@ -301,6 +305,18 @@ class PresidentGame:
 def get_cards_as_dict(cards: [Card]) -> dict[int, list[Card]]:
     cards_as_dict = {}
     for card in cards:
-        cards_of_value = cards_as_dict[card.value]
-        cards_as_dict[card.value] = [card] + cards_of_value
+        if card.value not in list(cards_as_dict.keys()):
+            cards_as_dict[card.value] = [card]
+        else:
+            cards_as_dict[card.value] = [card] + cards_as_dict[card.value]
     return cards_as_dict
+
+
+def is_card_in_cards(card: Card, cards: list[Card]) -> bool:
+    cards_as_dict = get_cards_as_dict(cards)
+    contain = False
+    if card.value in list(cards_as_dict.keys()):
+        for card_same_value in cards_as_dict[card.value]:
+            if card_same_value.suit == card.suit:
+                contain = True
+    return contain

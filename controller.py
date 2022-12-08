@@ -7,6 +7,7 @@ class PresidentGameController:
 
     def __init__(self, players: list[Player] = None, number_of_sets: int = 1):
         self.__game = PresidentGame(players)
+        self.ai_turn()
 
     @property
     def game(self):
@@ -31,23 +32,21 @@ class PresidentGameController:
 
                 # jouer les cartes de la requête
                 self.__game.play(cards)
-                pass
 
             self.__game.next_player()
-
-            while isinstance(self.__game.get_current_player(), AIPlayer) and not self.__game.is_turn_ended():
-                self.ai_player_play(self.__game.get_current_player())
-                self.__game.next_player()
+            self.ai_turn()
 
         except (NotInRulesException, WrongRequestException) as error:
             raise error
 
-    def ai_player_play(self, ai_player: AIPlayer):
-        cards_to_play = ai_player.random_cards_to_play(self.__game.current_trick)
-        if len(cards_to_play) == 0:
-            self.__game.skip_turn()
-        else:
-            self.__game.play(cards_to_play)
+    def ai_turn(self):
+        while isinstance(self.__game.get_current_player(), AIPlayer) and not self.__game.is_turn_ended():
+            cards_to_play = self.__game.get_current_player().random_cards_to_play(self.__game.current_trick)
+            if len(cards_to_play) == 0:
+                self.__game.skip_turn()
+            else:
+                self.__game.play(cards_to_play)
+            self.__game.next_player()
 
     def end_turn(self):
         self.__game.end_turn()
