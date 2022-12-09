@@ -33,6 +33,7 @@ class CommandLineView:
             cards_to_chose += "\n"
 
             self.__request = {}
+            # initialise l'erreur à 'start' pour rentrer dans la boucle suivante
             self.__error = "start"
 
             #  tant qu'il y a des erreurs de la part de l'utilisateur
