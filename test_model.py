@@ -58,7 +58,8 @@ class TestPlayer(unittest.TestCase):
     def test_add_card_to_hand(self):
         player = model.Player()
         ace_of_hearts = model.Card('A', '♡')
-        player.add_to_hand(ace_of_hearts)
+        ace_of_hearts_cards = model.Cards([ace_of_hearts])
+        player.add_to_hand(ace_of_hearts_cards)
         self.assertEqual(player.hand, [ace_of_hearts],
                          "A card added to a player is added to it hand")
         self.assertTrue(player.has_card(ace_of_hearts),
@@ -67,8 +68,9 @@ class TestPlayer(unittest.TestCase):
     def test_remove_card_from_hand(self):
         player = model.Player()
         ace_of_hearts = model.Card('A', '♡')
-        player.add_to_hand(ace_of_hearts)
-        player.remove_from_hand(ace_of_hearts)
+        ace_of_hearts_cards = model.Cards([ace_of_hearts])
+        player.add_to_hand(ace_of_hearts_cards)
+        player.remove_from_hand(ace_of_hearts_cards)
         self.assertEqual(player.hand, [],
                          "A card removed from a player is removed from it hand")
 
@@ -82,30 +84,34 @@ class TestTrick(unittest.TestCase):
 
     def test_add_one_card_to_trick(self):
         ace_of_hearts = model.Card('A', '♡')
+        ace_of_hearts_cards = model.Cards([ace_of_hearts])
         ace_of_spades = model.Card('A', '♤')
+        ace_of_spades_cards = model.Cards([ace_of_spades])
         two_of_hearts = model.Card('2', '♡')
+        two_of_hearts_cards = model.Cards([two_of_hearts])
+        player_index = 1
         trick = model.Trick()
-        trick.add_cards([ace_of_hearts])
+        trick.add_cards(ace_of_hearts_cards, player_index)
         self.assertEqual(trick.number_of_cards, 1,
                          "The first card added to the trick define the number of cards of the trick")
-        self.assertEqual(trick.cards, [ace_of_spades],
+        self.assertEqual(trick.cards, ace_of_spades_cards,
                          "Trick cards are equal to another with the same amount of cards of every value")
-        self.assertNotEqual(trick.cards, [two_of_hearts],
+        self.assertNotEqual(trick.cards, two_of_hearts_cards,
                             "Trick cards are not equal to another with cards of different values")
-        self.assertNotEqual(trick.cards, [ace_of_spades, ace_of_hearts],
+        self.assertNotEqual(trick.cards, model.Cards([ace_of_spades, ace_of_hearts]),
                             "Trick cards are not equal to another with a different amount of cards")
 
-        trick.add_cards([two_of_hearts])
+        trick.add_cards(two_of_hearts_cards, player_index)
         self.assertEqual(trick.number_of_cards, 1,
                          "A second card added to the trick doesn't change the number of cards of the trick")
-        self.assertEqual(trick.cards, [ace_of_spades, two_of_hearts],
+        self.assertEqual(trick.cards, model.Cards([ace_of_spades, two_of_hearts]),
                          "Trick cards are equal to another with the same amount of cards of every value")
 
     def test_add_two_cards_to_trick(self):
         ace_of_hearts = model.Card('A', '♡')
         ace_of_spades = model.Card('A', '♤')
         trick = model.Trick()
-        trick.add_cards([ace_of_hearts, ace_of_spades])
+        trick.add_cards(model.Cards([ace_of_hearts, ace_of_spades]), 1)
         self.assertEqual(trick.number_of_cards, 2,
                          "The first cards added to the trick define the number of cards of the trick")
 
@@ -120,7 +126,6 @@ class TestPresidentGame(unittest.TestCase):
         game = model.PresidentGame()
         player_1 = game.players[0]
         player_2 = game.players[1]
-        print(player_1.hand)
         self.assertTrue(len(player_1.hand) > 0)
         self.assertTrue(len(player_1.hand) >= len(player_2.hand))
 

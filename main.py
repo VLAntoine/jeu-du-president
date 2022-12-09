@@ -1,6 +1,6 @@
-from model import Player, AIPlayer
+from model import Player, AIPlayer, Cards, Card
 from view import CommandLineView
 
-players: list[Player] = [AIPlayer("Benoît"), AIPlayer("Norbert"), AIPlayer("Danielle")]
+players: list[Player] = [Player("Benoît"), Player("Norbert"), Player("Danielle")]
 
 commandLineView = CommandLineView(players)
